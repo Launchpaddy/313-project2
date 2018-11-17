@@ -5,19 +5,20 @@
 </head>
 <body>
    <form action="/getRate">
-      Enter Weight(pounds)<br>
-      <input type="number" name="weight">
+      Enter Weight(oz) 3.5oz max weight<br>
+      <input type="number" step=0.1 max="13"name="weight">
       <br>
-      <input type="radio" name="shippingMethod" value="stamped">
-      Letters (Stamped)<br>
-      <input type="radio" name="shippingMethod" value="metered">
+      <input type="radio" name="shippingMethod" value="Letters (Stamped)">
+      Letters (Stamped) 3.5oz max weight<br>
+      <input type="radio" name="shippingMethod" value="Letters (Metered)">
       Letters (Metered) <br>
-      <input type="radio" name="shippingMethod" value="flats)">
+      <input type="radio" name="shippingMethod" value="Large Envelopes (Flats)">
       Large Envelopes (Flats)<br>
-      <input type="radio" name="shippingMethod" value="retail">
+      <input type="radio" name="shippingMethod" value="First-Class Package Service—Retail">
       First-Class Package Service--Retail<br>
       <input type="submit" name="submit">
    </form>
+
 
 </body>
 </html>
