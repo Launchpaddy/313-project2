@@ -1,28 +1,4 @@
-// var express = require("express");
-
-// var app = express();
-
-// app.set("views",__dirname + "/views");
-// app.set("view engine", "ejs");
-
-// app.use(express.static("public"));
-
-// app.get("/", function(req, res) {
-//    console.log("Received a request for /");
-
-//    res.write("This is the root.");
-//    res.end();
-// });
-
-// app.set('port', process.env.PORT || 5000);
-// app.listen(5000, function() {
-//     console.log("Listening on port 5000");
-// });
-
-/***************************************************/
 const express = require('express');
-
-//var gameEngine = require('./gameEngine.js');
 
 var app = express();
 
@@ -42,28 +18,13 @@ app.set('port', process.env.PORT || 5000)
 });
 
 
-//////////////////////////////////////////////////////////////
-
-// const express = require('express');
-// const path = require('path');
-// const PORT = process.env.PORT || 5000;
-// var app = express();
-// express()
-//   .use(express.static(path.join(__dirname, 'public')))
-//   .set('views', path.join(__dirname, 'views'))
-//   .set('view engine', 'ejs')
-//   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
-//   // .get('/', (req, res) => res.render('pages/index'))
-
-///////////////////////////////////////////////////////
-
 app.get("/getRate", function(req, res) {
    // Controller
    console.log("Received a request for getRate");
-   method = req.query.shippingMethod;
-   weight = req.query.weight;
+   var method = req.query.shippingMethod;
+   var weight = req.query.weight;
 
-   method = checkWeight(method, weight);
+   var method = checkWeight(method, weight);
 
    var price = getPrice(method, weight);
 
@@ -74,14 +35,11 @@ app.get("/getRate", function(req, res) {
 });
 
 
-
-
-
-
-
-
-
-
+/*******************************************************************
+* CHECK to see if weight is above 3.5 oz
+* if it is then we cant use a letter
+* will automatically set to flats if above 3.5
+*******************************************************************/
 function checkWeight(method, weight) {
 
     if (weight > 3.5 && (method != "Large Envelopes (Flats)" && method != "First-Class Package Service—Retail")) {
@@ -90,10 +48,15 @@ function checkWeight(method, weight) {
    return method;
 }
 
+/*******************************************************************
+* Get Price takes a shipping method and a Weight
+* assuming the weight is within the standards of 13oz and the
+* appropriate method is chosen.
+*******************************************************************/
 function getPrice(method, weight) {
-   // access the database
-   // make sure they have permission to be on the site
+
    oz = weight;
+   // oz is shorter and what we are using
 
 
    var price = 0.00;
@@ -133,7 +96,7 @@ function getPrice(method, weight) {
 
    }
 
-
+   // returns price at 2 decimals of precision
    return price.toFixed(2);
 }
 
