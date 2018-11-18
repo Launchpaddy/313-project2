@@ -1,37 +1,35 @@
-// var express = require("express");
-
-// var app = express();
-
-// app.set("views",__dirname + "/views");
-// app.set("view engine", "ejs");
-
-// app.use(express.static("public"));
-
-// app.get("/", function(req, res) {
-//    console.log("Received a request for /");
-
-//    res.write("This is the root.");
-//    res.end();
-// });
-
-// app.set('port', process.env.PORT || 5000);
-// app.listen(5000, function() {
-//     console.log("Listening on port 5000");
-// });
-
-const express = require('express');
-
-
+var express = require("express");
 
 var app = express();
 
-app.set('port', process.env.PORT || 5000)
-  .use(express.static(__dirname + '/public'))
-  .set('views', __dirname + '/views')
-  .set('view engine', 'ejs')
-  .listen(app.get('port'), function() {
-   console.log('Listening on port: ' + app.get('port'));
-  });
+app.set("views",__dirname + "/views");
+app.set("view engine", "ejs");
+
+app.use(express.static("public"));
+
+app.get("/", function(req, res) {
+   console.log("Received a request for /");
+
+   res.write("This is the root.");
+   res.end();
+});
+
+app.set('port', process.env.PORT || 5000);
+app.listen(5000, function() {
+    console.log("Listening on port 5000");
+});
+
+/***************************************************/
+// const express = require('express');
+
+
+
+// var app = express();
+
+// app.set('port', process.env.PORT || 5000)
+//   .use(express.static(__dirname + '/public'))
+//   .set('views', __dirname + '/views')
+//   .set('view engine', 'ejs');
 
 
 //////////////////////////////////////////////////////////////
@@ -45,7 +43,7 @@ app.set('port', process.env.PORT || 5000)
 //   .set('views', path.join(__dirname, 'views'))
 //   .set('view engine', 'ejs')
 //   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
-//   .get('/', (req, res) => res.render('pages/index'))
+//   // .get('/', (req, res) => res.render('pages/index'))
 
 ///////////////////////////////////////////////////////
 
