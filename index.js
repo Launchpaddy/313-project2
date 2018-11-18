@@ -34,6 +34,13 @@ app.set('port', process.env.PORT || 5000)
    console.log('Listening on port: ' + app.get('port'));
   });
 
+  app.get("/", function(req, res) {
+   console.log("Received a request for /");
+
+   res.write("This is the root.");
+   res.end();
+});
+
 
 //////////////////////////////////////////////////////////////
 
