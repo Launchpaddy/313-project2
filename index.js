@@ -1,102 +1,104 @@
-const express = require('express');
-
+var express = require('express');
 var app = express();
+const { Pool } = require("pg");
 
-app.set('port', process.env.PORT || 5000)
-  .use(express.static(__dirname + '/public'))
-  .set('views', __dirname + '/views')
-  .set('view engine', 'ejs')
-  .listen(app.get('port'), function() {
-   console.log('Listening on port: ' + app.get('port'));
-  });
+const connectionString = process.env.DATABASE_URL || "postgres://wylhwmmdlpyhrn:2f8c5edd5ed7cc0cc7f0191640c94742add7ddcd83b83d6087429a6e34d2562f@ec2-23-21-201-12.compute-1.amazonaws.com:5432/d4i4q4a7me4ad8";
 
-  app.get("/", function(req, res) {
-   console.log("Received a request for /");
+const pool = new Pool({connectionString: connectionString});
 
-   res.write("This is the root.");
-   res.end();
+
+app.set('port', (process.env.PORT || 5000));
+app.use(express.static(__dirname + '/public'));
+
+
+app.get('/getPerson', function(request, response) {
+   getPerson(request, response);
+});
+
+app.get('/getSport', function(request, response) {
+   getSport(request, response);
+});
+
+app.listen(app.get('port'), function() {
+   console.log("Node is running on port", app.get('port'));
 });
 
 
-app.get("/getRate", function(req, res) {
-   // Controller
-   console.log("Received a request for getRate");
-   var method = req.query.shippingMethod;
-   var weight = req.query.weight;
-
-   var method = checkWeight(method, weight);
-
-   var price = getPrice(method, weight);
 
 
-   var params = {price: price, method: method, weight: weight};
+function getSport(request, response) {
 
-   res.render("getRate", params);
-});
+   var id = request.query.id;
 
+   getSportFromDb(id, function(error, result) {
 
-/*******************************************************************
-* CHECK to see if weight is above 3.5 oz
-* if it is then we cant use a letter
-* will automatically set to flats if above 3.5
-*******************************************************************/
-function checkWeight(method, weight) {
-
-    if (weight > 3.5 && (method != "Large Envelopes (Flats)" && method != "First-Class Package Service—Retail")) {
-      method = "Large Envelopes (Flats)";
-   }
-   return method;
+      if (error || result == null || result.length != 1) {
+         response.status(500).json({success: false, data: error});
+      } else {
+         var person = result[0];
+         response.status(200).json(result[0]);
+      }
+   });
 }
 
-/*******************************************************************
-* Get Price takes a shipping method and a Weight
-* assuming the weight is within the standards of 13oz and the
-* appropriate method is chosen.
-*******************************************************************/
-function getPrice(method, weight) {
+function getSportFromDb(id, callback) {
 
-   oz = weight;
-   // oz is shorter and what we are using
+   console.log("getting Sport form DB with id: " + id);
 
+   var sql = "";
 
-   var price = 0.00;
-   switch(method){
-      case "Letters (Stamped)":
-         price = 0.50;
-         for (var i = 1; oz > i; i++) {
-            price += 0.21;
-         }
-         break;
-      case "Letters (Metered)":
-         price = 0.47;
-         for (var i = 1; oz > i; i++) {
-            price += 0.21;
-         }
-         break;
-      case "Large Envelopes (Flats)":
-         price = 1.00;
-         for (var i = 1; oz > i; i++) {
-            price += 0.21;
-         }
-         break;
-      case "First-Class Package Service—Retail":
-         price = 3.75;
-         for (var i = 1; oz >= i; i++) {
-            if (oz < 5) {
-               price = 3.50;
-            }
-            if (oz > 4 && oz < 9) {
-               price = 3.75;
-            }
-            if (i > 8) {
-               price += 0.35;
-            }
-         }
-         break;
+   var params = [id];
 
-   }
+   pool.query(sql, params, function(err, result) {
 
-   // returns price at 2 decimals of precision
-   return price.toFixed(2);
+      if (err) {
+         console.log("Error in query: ")
+         console.log(err);
+         callback(err, null);
+      }
+
+      console.log("Found result: " + JSON.stringify(result.rows));
+
+      callback(null, result.rows);
+   });
+
 }
 
+
+function getPerson(request, response) {
+
+   var id = request.query.id;
+
+   getPersonFromDb(id, function(error, result) {
+
+      if (error || result == null || result.length != 1) {
+         response.status(500).json({success: false, data: error});
+      } else {
+         var person = result[0];
+         response.status(200).json(result[0]);
+      }
+   });
+}
+
+function getPersonFromDb(id, callback) {
+
+   console.log("getting person form DB with id: " + id);
+
+   var sql = "SELECT id, first, last, birthdate FROM person WHERE id = $1::int";
+
+   var params = [id];
+
+   pool.query(sql, params, function(err, result) {
+
+      if (err) {
+         console.log("Error in query: ")
+         console.log(err);
+         callback(err, null);
+      }
+
+      console.log("Found result: " + JSON.stringify(result.rows));
+
+      callback(null, result.rows);
+   });
+
+}
