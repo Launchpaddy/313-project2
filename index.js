@@ -11,8 +11,8 @@ app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
 
 
-app.get('/getPerson', function(request, response) {
-   getPerson(request, response);
+app.get('/getUser', function(request, response) {
+   getUser(request, response);
 });
 
 app.get('/getSport', function(request, response) {
@@ -35,7 +35,7 @@ function getSport(request, response) {
       if (error || result == null || result.length != 1) {
          response.status(500).json({success: false, data: error});
       } else {
-         var person = result[0];
+         var user = result[0];
          response.status(200).json(result[0]);
       }
    });
@@ -45,7 +45,7 @@ function getSportFromDb(id, callback) {
 
    console.log("getting Sport form DB with id: " + id);
 
-   var sql = "";
+   var sql = "SELECT ";
 
    var params = [id];
 
@@ -65,26 +65,26 @@ function getSportFromDb(id, callback) {
 }
 
 
-function getPerson(request, response) {
+function getUser(request, response) {
 
    var id = request.query.id;
 
-   getPersonFromDb(id, function(error, result) {
+   getUserFromDb(id, function(error, result) {
 
       if (error || result == null || result.length != 1) {
          response.status(500).json({success: false, data: error});
       } else {
-         var person = result[0];
+         var user = result[0];
          response.status(200).json(result[0]);
       }
    });
 }
 
-function getPersonFromDb(id, callback) {
+function getUserFromDb(id, callback) {
 
-   console.log("getting person form DB with id: " + id);
+   console.log("getting user form DB with id: " + id);
 
-   var sql = "SELECT id, first, last, birthdate FROM person WHERE id = $1::int";
+   var sql = "SELECT id, display_name, username, password FROM users WHERE id = $1::int";
 
    var params = [id];
 
