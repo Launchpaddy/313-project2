@@ -86,14 +86,13 @@ function getUserFromDb(id, callback) {
    console.log("getting user from DB with id: " + id);
 
   // var sql = "SELECT id, display_name, username, password FROM users WHERE id = 1";
-    var sql = 'SELECT * FROM users WHERE id = $1::int';
+    var sql = 'SELECT id FROM users WHERE id = $1::int';
 
    var params = [id];
    //var params = "1";
 
    pool.query(sql, params, function(err, result) {
 
-      result = [int 5];
       if (err) {
 
          callback(err, "yes");
