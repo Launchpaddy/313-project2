@@ -3,6 +3,7 @@ var app = express();
 const { Pool } = require("pg");
 
 const connectionString = process.env.DATABASE_URL || "postgres://wylhwmmdlpyhrn:2f8c5edd5ed7cc0cc7f0191640c94742add7ddcd83b83d6087429a6e34d2562f@ec2-23-21-201-12.compute-1.amazonaws.com:5432/d4i4q4a7me4ad8";
+                                                   //"postgres://wylhwmmdlpyhrn:2f8c5edd5ed7cc0cc7f0191640c94742add7ddcd83b83d6087429a6e34d2562f@ec2-23-21-201-12.compute-1.amazonaws.com:5432/d4i4q4a7me4ad8";
 
 const pool = new Pool({connectionString: connectionString});
 
@@ -68,10 +69,10 @@ function getSportFromDb(id, callback) {
 function getUser(request, response) {
 
    var id = request.query.id;
-
    getUserFromDb(id, function(error, result) {
 
       if (error || result == null || result.length != 1) {
+         console.log("this is the result: " + result);
          response.status(500).json({success: false, data: error});
       } else {
          var user = result[0];
@@ -84,9 +85,10 @@ function getUserFromDb(id, callback) {
 
    console.log("getting user form DB with id: " + id);
 
-   var sql = "SELECT id, display_name, username, password FROM users WHERE id = $1::int";
+   var sql = "SELECT id, display_name, username, password FROM users WHERE id = 1";
 
-   var params = [id];
+   // var params = [id];
+   var params = 1;
 
    pool.query(sql, params, function(err, result) {
 
@@ -96,7 +98,7 @@ function getUserFromDb(id, callback) {
          callback(err, null);
       }
 
-      console.log("Found result: " + JSON.stringify(result.rows));
+      //console.log("Found result: " + JSON.stringify(result.rows));
 
       callback(null, result.rows);
    });
