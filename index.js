@@ -93,7 +93,7 @@ function getUserFromDb(id, callback) {
 
    pool.query(sql, params, function(err, result) {
 
-      result = {success: yesDamit};
+      result = {success: "yesDamit"};
       if (err) {
 
          callback(err, "yes");
