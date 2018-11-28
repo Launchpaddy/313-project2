@@ -91,13 +91,13 @@ function getUserFromDb(id, callback) {
    // var params = [id];
    var params = 1;
 
-   pool.query(sql, params, (err, result) => {
+   pool.query(sql, params, function(err, result) {
 
       if (err) {
 
          console.log("Error in query: ");
          console.log(err);
-         callback(err, null);
+         callback(err, "yes");
       }
       //console.log("Found result: " + JSON.stringify(result.rows));
 
