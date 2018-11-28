@@ -73,7 +73,7 @@ function getUser(request, response) {
 
       if (error || result == null || result.length != 1) {
          console.log("this is the result: " + result);
-         response.status(500).json({success: false, data: error});
+         response.status(500).json({success: false, data: result});
       } else {
          var user = result[0];
          response.status(200).json(result[0]);
