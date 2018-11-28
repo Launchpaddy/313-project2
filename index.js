@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 const { Pool } = require("pg");
 
-const connectionString = process.env.DATABASE_URL; // || "postgres://wylhwmmdlpyhrn:2f8c5edd5ed7cc0cc7f0191640c94742add7ddcd83b83d6087429a6e34d2562f@ec2-23-21-201-12.compute-1.amazonaws.com:5432/d4i4q4a7me4ad8";
+const connectionString = process.env.DATABASE_URL || "postgres://wylhwmmdlpyhrn:2f8c5edd5ed7cc0cc7f0191640c94742add7ddcd83b83d6087429a6e34d2562f@ec2-23-21-201-12.compute-1.amazonaws.com:5432/d4i4q4a7me4ad8";
                                                    //"postgres://wylhwmmdlpyhrn:2f8c5edd5ed7cc0cc7f0191640c94742add7ddcd83b83d6087429a6e34d2562f@ec2-23-21-201-12.compute-1.amazonaws.com:5432/d4i4q4a7me4ad8";
 console.log("connectionString  = " + connectionString);
 const pool = new Pool({connectionString: connectionString});
@@ -85,22 +85,23 @@ function getUserFromDb(id, callback) {
 
    console.log("getting user from DB with id: " + id);
 
-   var sql = "SELECT id, display_name, username, password FROM users WHERE id = 1";
+  // var sql = "SELECT id, display_name, username, password FROM users WHERE id = 1";
+    var sql = 'SELECT * FROM users';
 
    // var params = [id];
    var params = 1;
 
-   pool.query(sql, params, function(err, result) {
+   pool.query(sql, params, (err, result) => {
 
       if (err) {
          console.log("Error in query: ");
          console.log(err);
          callback(err, null);
       }
-
+      response.status(500).json({success: result});
       //console.log("Found result: " + JSON.stringify(result.rows));
 
-      callback(null, result.rows);
+      callback(null, result.rows[0].id);
    });
 
 }
