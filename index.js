@@ -93,6 +93,7 @@ function getUserFromDb(id, callback) {
 
    pool.query(sql, params, function(err, result) {
 
+      result = {success: yesDamit};
       if (err) {
 
          callback(err, "yes");
@@ -101,7 +102,7 @@ function getUserFromDb(id, callback) {
       }
      //console.log("Found result: " + JSON.stringify(result[0]));
 
-      callback(null, result[0]);
+      callback(null, result);
    });
 
 }
