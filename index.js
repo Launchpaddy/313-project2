@@ -94,11 +94,11 @@ function getUserFromDb(id, callback) {
    pool.query(sql, params, (err, result) => {
 
       if (err) {
+      response.status(500).json({success: result});
          console.log("Error in query: ");
          console.log(err);
          callback(err, null);
       }
-      response.status(500).json({success: result});
       //console.log("Found result: " + JSON.stringify(result.rows));
 
       callback(null, result.rows[0].id);
