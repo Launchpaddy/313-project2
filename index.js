@@ -4,7 +4,7 @@ const { Pool } = require("pg");
 
 const connectionString = process.env.DATABASE_URL || "postgres://wylhwmmdlpyhrn:2f8c5edd5ed7cc0cc7f0191640c94742add7ddcd83b83d6087429a6e34d2562f@ec2-23-21-201-12.compute-1.amazonaws.com:5432/d4i4q4a7me4ad8";
                                                    //"postgres://wylhwmmdlpyhrn:2f8c5edd5ed7cc0cc7f0191640c94742add7ddcd83b83d6087429a6e34d2562f@ec2-23-21-201-12.compute-1.amazonaws.com:5432/d4i4q4a7me4ad8";
-
+console.log("connectionString  = " + connectionString);
 const pool = new Pool({connectionString: connectionString});
 
 
@@ -83,7 +83,7 @@ function getUser(request, response) {
 
 function getUserFromDb(id, callback) {
 
-   console.log("getting user form DB with id: " + id);
+   console.log("getting user from DB with id: " + id);
 
    var sql = "SELECT id, display_name, username, password FROM users WHERE id = 1";
 
@@ -93,7 +93,7 @@ function getUserFromDb(id, callback) {
    pool.query(sql, params, function(err, result) {
 
       if (err) {
-         console.log("Error in query: ")
+         console.log("Error in query: ");
          console.log(err);
          callback(err, null);
       }
